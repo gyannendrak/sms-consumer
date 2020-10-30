@@ -1,0 +1,10 @@
+package KieRule;
+import com.ghf.sms.model.SMSData;
+
+rule "CheckHavingSameContent"
+
+when
+smsObject : SMSData(size == 0 );
+then
+smsObject.setStop(true);
+end;

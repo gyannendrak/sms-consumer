@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="file">
+    <file>/home/notifications/sms/sms-consumer.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss} traceId=%X{X-B3-TraceId} spanId=%X{X-B3-SpanId} ${application.name} env=${active.profile} %-5p %c{2}:%L - %m%n
+      </Pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>/home/notifications/sms/sms-consumer.log.%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+              class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>1024MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="RawConsoleAppender">
+    <encoder>
+      <Pattern>%m%n</Pattern>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.classic.AsyncAppender" name="async">
+    <appender-ref ref="file"/>
+  </appender>
+
+  <logger additivity="false" level="debug" name="com.ghf.sms">
+    <appender-ref ref="async"/>
+    <appender-ref ref="RawConsoleAppender"/>
+  </logger>
+
+  <root level="error">
+    <appender-ref ref="async"/>
+    <appender-ref ref="RawConsoleAppender"/>
+  </root>
+</configuration>
